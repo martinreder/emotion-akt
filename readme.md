@@ -111,3 +111,46 @@ keras.callbacks.EarlyStopping(
 In the following graph we see that by disabling the `restore_best_weights` option we can actually keep the better model in the end.
 
 ![](images/val_acc3.png)
+
+## Testing
+
+I evaluated my best_model on the test dataset and did some experiments.
+
+```python
+import tensorflow as tf
+from keras.models import load_model
+import numpy as np
+
+# Load the saved model from the specified path
+model_path = 'output/best_model'
+model = load_model(model_path)
+
+train_dataset, val_dataset, test_dataset = load_and_preprocess_data()
+
+# metrics from model.evaluate
+val_accuracy = model.evaluate(test_dataset)
+
+print(f"Testing accuracy: {val_accuracy}")
+
+# Get predictions for test data
+predictions = model.predict(test_dataset)
+
+# Since 'predictions' is a 2D array, each row corresponds to predictions for a given input
+# To get the first prediction, we select the first row
+first_prediction = predictions[0]
+
+# Get the class with the highest probability from the first prediction
+predicted_class = np.argmax(first_prediction)
+print(f"First prediction {first_prediction}")
+print(f"Predicted class for the first test example: {predicted_class} = Happy")
+```
+
+```txt
+Loading dataset...
+113/113 [==============================] - 3s 13ms/step - loss: 1.2757 - accuracy: 0.5256 - categorical_accuracy: 0.5256
+Testing accuracy: [1.275729775428772, 0.5256410241127014, 0.5256410241127014]
+113/113 [==============================] - 3s 13ms/step
+First prediction [0.32203916 0.01416158 0.04879333 0.24709927 0.19526306 0.02899002
+ 0.14365356]
+Predicted class for the first test example: 0 = Happy
+```
