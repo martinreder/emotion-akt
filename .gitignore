@@ -1,5 +1,5 @@
-./output
-./fer2013
-./mlartifacts
-./mlruns
-./__pycache__
+output
+fer2013
+mlartifacts
+mlruns
+__pycache__
